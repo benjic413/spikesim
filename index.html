@@ -85,6 +85,11 @@
             return
         }
         
+        // When primarily healing, display attack on user
+        if (-attacks[attack].selfDamage > attacks[attack].damage) {
+            target = user
+        }
+        
         target.querySelector('aside').innerHTML = attack
         target.querySelector('aside').style.display = "block"
         setTimeout(() => target.querySelector('aside').style.display = "none", 300)
