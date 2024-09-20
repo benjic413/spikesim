@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title></title>
+    <style>
+    main {
+        display: flex;
+    }
+    section {
+        display: inline-block;
+        border: 1px solid red;
+        width: 250px;
+        height: 360px;
+        padding: 8px;
+    }
+    button {
+        display: block;
+    }
+    </style>
+  </head>
+
+  <body>
+    <h1>ITS BATTLE TIME</h1>
+    <main>
+    <section>
+        <h2>Brightbulb</h2>
+        <label>HP<input id=opponentHP value=100 disabled autocomplete=off /></label>
+        <label>Wins<input id=opponentWins value=0 disabled autocomplete=off /></label>
+        <img src="media/opponent.png" />
+    </section>
+    <section>
+        <h2>You</h2>
+        <label>HP<input id=playerHP value=100 disabled autocomplete=off /></label>
+        <label>Wins<input id=playerWins value=0 disabled autocomplete=off /></label>
+        <button>Smack</button>
+        <button>Tickle</button>
+        <img src="media/you.png" />
+    </section>
+    </main>
+    <script>
+    const attacks = {
+        "Smack": {"damage": 10},
+        "Tickle": {"damage": 1},
+    }
+    
+    function reset() {
+        playerHP.value = 100
+        opponentHP.value = 100
+    }
+    
+    function attack(event) {
+        const attack = event.target.textContent
+        
+        opponentHP.value = opponentHP.value - attacks[attack].damage
+        
+        // Get random attack
+        let arr = Object.keys(attacks)
+        let opponent_attack = arr[Math.floor(Math.random() * arr.length)]
+
+        playerHP.value = playerHP.value - attacks[opponent_attack].damage
+        
+        if (playerHP.value <= 0) {
+            opponentWins.value = +opponentWins.value + 1
+            reset()
+        }
+        if (opponentHP.value <= 0) {
+            playerWins.value = +playerWins.value + 1
+            reset()
+        }
+    }
+    
+    document.querySelectorAll("button").forEach(e => e.addEventListener('click', attack))
+    </script>
+  </body>
+</html>
