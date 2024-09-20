@@ -37,13 +37,15 @@
         <label>Wins<input id=playerWins value=0 disabled autocomplete=off /></label>
         <button>Smack</button>
         <button>Tickle</button>
+        <button>Heal</button>
         <img src="media/you.png" />
     </section>
     </main>
     <script>
     const attacks = {
-        "Smack": {"damage": 10},
-        "Tickle": {"damage": 1},
+        "Smack": {"damage": 10, "selfDamage": 5},
+        "Tickle": {"damage": 1, "selfDamage": 0},
+        "Heal": {"damage": 0, "selfDamage": -10},
     }
     
     function reset() {
@@ -51,17 +53,22 @@
         opponentHP.value = 100
     }
     
+    function applyAttack(attack, user, target) {
+        target.value = target.value - attacks[attack].damage
+        user.value = user.value - attacks[attack].selfDamage
+    }
+    
     function attack(event) {
         const attack = event.target.textContent
-        
-        opponentHP.value = opponentHP.value - attacks[attack].damage
+
+        applyAttack(attack, playerHP, opponentHP)
         
         // Get random attack
         let arr = Object.keys(attacks)
         let opponent_attack = arr[Math.floor(Math.random() * arr.length)]
 
-        playerHP.value = playerHP.value - attacks[opponent_attack].damage
-        
+        applyAttack(opponent_attack, opponentHP, playerHP)
+       
         if (playerHP.value <= 0) {
             opponentWins.value = +opponentWins.value + 1
             reset()
