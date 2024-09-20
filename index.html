@@ -19,6 +19,18 @@
     button {
         display: block;
     }
+    aside {
+        display:none;
+        position: relative;
+        top: 120px;
+        left: 40px;
+        height:0;
+        width:0;
+        margin:0;
+        padding:0;
+        font-size: 40px;
+        color: red;
+    }
     </style>
   </head>
 
@@ -26,14 +38,16 @@
     <h1>ITS BATTLE TIME</h1>
     <main>
     <section>
+        <aside>Them</aside>
         <h2>Brightbulb</h2>
-        <label>HP<input id=opponentHP value=100 disabled autocomplete=off /></label>
+        <label>HP<input class=hp value=100 disabled autocomplete=off /></label>
         <label>Wins<input id=opponentWins value=0 disabled autocomplete=off /></label>
         <img src="media/opponent.png" />
     </section>
     <section>
+        <aside>Us</aside>
         <h2>You</h2>
-        <label>HP<input id=playerHP value=100 disabled autocomplete=off /></label>
+        <label>HP<input class=hp value=100 disabled autocomplete=off /></label>
         <label>Wins<input id=playerWins value=0 disabled autocomplete=off /></label>
         <button>Smack</button>
         <button>Tickle</button>
@@ -49,34 +63,48 @@
     }
     
     function reset() {
-        playerHP.value = 100
-        opponentHP.value = 100
+        document.querySelectorAll('section').forEach(card => {
+            card.querySelector('.hp').value = 100
+        })
     }
     
     function applyAttack(attack, user, target) {
-        target.value = target.value - attacks[attack].damage
-        user.value = user.value - attacks[attack].selfDamage
+        userHP = user.querySelector('.hp')
+        targetHP = target.querySelector('.hp')
+        
+        targetHP.value = targetHP.value - attacks[attack].damage
+        userHP.value = userHP.value - attacks[attack].selfDamage
+
+        if (userHP.value <= 0) {
+            opponentWins.value = +opponentWins.value + 1
+            reset()
+            return
+        }
+        if (targetHP.value <= 0) {
+            playerWins.value = +playerWins.value + 1
+            reset()
+            return
+        }
+        
+        target.querySelector('aside').innerHTML = attack
+        target.querySelector('aside').style.display = "block"
+        setTimeout(() => target.querySelector('aside').style.display = "none", 300)
     }
     
     function attack(event) {
         const attack = event.target.textContent
-
-        applyAttack(attack, playerHP, opponentHP)
+        let self = event.target.parentNode
+        let target = document.querySelector('section')
+        
+        applyAttack(attack, self, target)
         
         // Get random attack
         let arr = Object.keys(attacks)
         let opponent_attack = arr[Math.floor(Math.random() * arr.length)]
 
-        applyAttack(opponent_attack, opponentHP, playerHP)
-       
-        if (playerHP.value <= 0) {
-            opponentWins.value = +opponentWins.value + 1
-            reset()
-        }
-        if (opponentHP.value <= 0) {
-            playerWins.value = +playerWins.value + 1
-            reset()
-        }
+        setTimeout(() => {
+            applyAttack(opponent_attack, target, self)
+        }, 300)
     }
     
     document.querySelectorAll("button").forEach(e => e.addEventListener('click', attack))
