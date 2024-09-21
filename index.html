@@ -40,28 +40,30 @@
   <body>
     <main>
     <section>
-        <aside>Them</aside>
+        <aside></aside>
         <h2>Brightbulb</h2>
         <label>HP<input class=hp value=100 disabled autocomplete=off /></label>
         <label>Wins<input id=opponentWins value=0 disabled autocomplete=off /></label>
         <img src="media/opponent.png" />
     </section>
     <section>
-        <aside>Us</aside>
-        <h2>You</h2>
+        <aside></aside>
+        <h2>Smokeos</h2>
         <label>HP<input class=hp value=100 disabled autocomplete=off /></label>
         <label>Wins<input id=playerWins value=0 disabled autocomplete=off /></label>
         <img src="media/you.png" />
         <button>Smack</button>
-        <button>Tickle</button>
+        <button>Kick</button>
         <button>Heal</button>
+        <button>Crash</button>
     </section>
     </main>
     <script>
     const attacks = {
         "Smack": {"damage": 10, "selfDamage": 5},
-        "Tickle": {"damage": 1, "selfDamage": 0},
+        "Kick": {"damage": 5, "selfDamage": 0},
         "Heal": {"damage": 0, "selfDamage": -10},
+        "Crash": {"damage": 50, "selfDamage": 55},
     }
     
     function reset() {
